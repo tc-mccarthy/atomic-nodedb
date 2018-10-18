@@ -35,6 +35,67 @@ class Atomic_Database {
 	}
 
 	/**
+	 * Builds the WHERE, ORDER BY and GROUP BY clauses
+	 *
+	 * @param Array options list of objects with WHERE, GROUP, ORDER, LIMIT and ORDER BY objects
+	 * @return String
+	 */
+	buildQueryEnd(options) {
+		options = Object.assign({
+			where: [],
+			group: [],
+			order: [],
+			limit: false,
+			offset: false
+		}, options);
+
+		const sql = [];
+
+		// builds the where clause
+		options.where.forEach((clause, index) => {
+			let statement = "WHERE";
+
+			if (index > 0) {
+				statement = "AND";
+			}
+
+			sql.push(`${statement} ${clause.col} ${clause.op} ${this.escape(clause.val)}`);
+		});
+
+		//build group by, if necessary
+		if (options.group.length > 0) {
+			sql.push(`GROUP BY ${options.group.join(", ")}`);
+		}
+
+		// begin order clause, if defined
+		if (options.order.length > 0) {
+			const order = [];
+
+			options.order.forEach((clause, index) => {
+				order.push(`${clause.col} ${clause.sort}`);
+			});
+
+			sql.push(`ORDER BY ${order.join(", ")}`);
+		}
+
+		//if there is a limit set, add it to the query
+		if (!!options.limit) {
+			sql.push(`LIMIT ${options.limit}`);
+		}
+
+		//if there is an offset set, add it to the query
+		if (!!options.offset) {
+			sql.push(`OFFSET ${options.offset}`);
+		}
+
+		return sql.join(" ");
+	}
+
+	escape(str) {
+		return (str + '').replace(/([\\"\\'])/g, '\\$1').replace(/\u0000/g, '\\0');
+	}
+
+	/**
 	 * Connects to DB and builds out the cluster
 	 */
 	connect() {
