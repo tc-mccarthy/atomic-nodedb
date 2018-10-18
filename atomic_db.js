@@ -1,8 +1,7 @@
 class Atomic_Database {
 	constructor(config) {
 		Object.assign(this, {
-			config: config,
-			dbCluster = mysql.createPoolCluster
+			config: config
 		});
 
 		this.connect();
@@ -105,10 +104,10 @@ class Atomic_Database {
 
 			//non read-only queries are sent to the master
 			if (!nonmaster) {
-				dbCluster.getConnection('MASTER', connectionProcess);
+				this.cluster.getConnection('MASTER', connectionProcess);
 			} else {
 				//read-only queries are routed betwixt master and slaves via round-robin
-				dbCluster.getConnection(connectionProcess);
+				this.cluster.getConnection(connectionProcess);
 			}
 		});
 	}
