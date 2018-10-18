@@ -1,0 +1,22 @@
+{
+  "name": "atomic-nodedb",
+  "version": "1.0.0",
+  "description": "Small DB class for talking to mysql",
+  "main": "atomic_db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tc-mccarthy/atomic-nodedb.git"
+  },
+  "author": "TC McCarthy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tc-mccarthy/atomic-nodedb/issues"
+  },
+  "homepage": "https://github.com/tc-mccarthy/atomic-nodedb#readme",
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
+}
